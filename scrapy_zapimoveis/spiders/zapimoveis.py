@@ -23,13 +23,15 @@ class ZapimoveisSpider(scrapy.Spider):
             }
 
         # add 1 to the parameter "pagina" at the end of url to search for next page.
-        if(response.request.to_dict()['url'] == 'https://www.vivareal.com.br/venda/sp/ribeirao-preto/'):
-            current_page = 0
+        print('----------------------------------------------------------------------')
+        print(response)
+        if response.request.url == 'https://www.vivareal.com.br/venda/sp/ribeirao-preto/':
+            current_page = 1
         else:
-            current_page = re.findall(r'\d+', response.request.to_dict()['url'])[0]
+            current_page = re.findall(r'\d+', response.request.url)[0]
         next_page = int(current_page) + 1
-        if(next_page <= 100 & response.status != 404):
-            next_page_url = 'https://www.vivareal.com.br/venda/sp/ribeirao-preto/?pagina=' + next_page + '#onde=Brasil,S%C3%A3o%20Paulo,Ribeir%C3%A3o%20Preto,,,,,,BR%3ESao%20Paulo%3ENULL%3ERibeirao%20Preto,,,'
+        if next_page <= 277 and response.status != 404:
+            next_page_url = f'https://www.vivareal.com.br/venda/sp/ribeirao-preto/?pagina={next_page}#onde=Brasil,S%C3%A3o%20Paulo,Ribeir%C3%A3o%20Preto,,,,,,BR%3ESao%20Paulo%3ENULL%3ERibeirao%20Preto,,,'
             yield scrapy.Request(url=next_page_url, callback=self.parse)
 
         pass
